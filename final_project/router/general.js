@@ -3,6 +3,7 @@ let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
+const axios = require('axios');
 
 const doesExist = (username)=>{
     let userswithsamename = users.filter((user)=>{
@@ -82,5 +83,28 @@ public_users.get('/review/:isbn',function (req, res) {
       return res.status(404).json({ message: "Review not found" }); // Return error if book is not found
     }
   });
+// TASK # 10
+public_users.get('/async-books', async (req, res) => {
+    try {
+        const response = await axios.get('https://hassanishfaq-5000.theiadockernext-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/books'); // Replace 'http://your-api-url/books' with the actual API endpoint
+        const bookList = response.data;
+        res.status(200).json({ bookList });
+    } catch (error) {
+        res.status(500).json({ message: "Failed to retrieve book list" });
+    }
+});
+
+//TASK 11
+public_users.get('/async-isbn/:isbn', (req, res) => {
+    const isbn = req.params.isbn;
+    axios.get(`http://your-api-url/book/${isbn}`) // Replace 'http://your-api-url/book/${isbn}' with the actual API endpoint
+        .then(response => {
+            const book = response.data;
+            res.status(200).json({ book });
+        })
+        .catch(error => {
+            res.status(404).json({ message: "Book not found" });
+        });
+});
 
 module.exports.general = public_users;
