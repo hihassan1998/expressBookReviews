@@ -83,28 +83,39 @@ public_users.get('/review/:isbn',function (req, res) {
       return res.status(404).json({ message: "Review not found" }); // Return error if book is not found
     }
   });
-// TASK # 10
-public_users.get('/async-books', async (req, res) => {
+// TASK # 10  Getting the list of books available in the shop
+public_users.get('/async-get-books', async function (req, res) {
     try {
-        const response = await axios.get('https://hassanishfaq-5000.theiadockernext-0-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/books'); // Replace 'http://your-api-url/books' with the actual API endpoint
-        const bookList = response.data;
-        res.status(200).json({ bookList });
+      const bookList = JSON.stringify({ books }, null, 4);
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate asynchronous operation
+      return res.status(200).json({ books: bookList });
     } catch (error) {
-        res.status(500).json({ message: "Failed to retrieve book list" });
+      return res.status(404).json({ message: `Book list not found` });
     }
-});
+  });
+  
 
-//TASK 11
-public_users.get('/async-isbn/:isbn', (req, res) => {
+//TASK 11 Getting the book details based on Author available in the shop
+public_users.get('/async-get-isbn/:isbn', function (req, res) {
     const isbn = req.params.isbn;
-    axios.get(`http://your-api-url/book/${isbn}`) // Replace 'http://your-api-url/book/${isbn}' with the actual API endpoint
-        .then(response => {
-            const book = response.data;
-            res.status(200).json({ book });
-        })
-        .catch(error => {
-            res.status(404).json({ message: "Book not found" });
-        });
-});
+    setTimeout(() => {
+      const book = books[isbn];
+      if (book) {
+        return res.status(200).json({ book });
+      } else {
+        return res.status(404).json({ message: "Book not found" });
+      }
+    }, 1000); // Simulate asynchronous operation
+  });
+ 
+//TASK 12  Getting the book details based on Author
+public_users.get('/async-')
+//TASK 13
 
+
+
+
+
+//TASK 13 Getting the book details based on Title available in the shop
 module.exports.general = public_users;
+ 
