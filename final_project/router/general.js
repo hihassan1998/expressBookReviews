@@ -96,7 +96,7 @@ public_users.get('/async-get-books', async function (req, res) {
   
 
 //TASK 11 Getting the book details based on Author available in the shop
-public_users.get('/async-get-isbn/:isbn', function (req, res) {
+public_users.get('/async-get-isbn/:isbn', async function (req, res) {
     const isbn = req.params.isbn;
     setTimeout(() => {
       const book = books[isbn];
@@ -108,7 +108,7 @@ public_users.get('/async-get-isbn/:isbn', function (req, res) {
     }, 1000); // Simulate asynchronous operation
   });
  
-//TASK 12  Getting the book details based on Author
+//TASK 12  Getting the book details based on Author available in the shop
 public_users.get('/async-get-author/:author', async function(req,res){
     const author = req.params.author; // Extract author from request parameters
     const booksByAuthor = Object.values(books).filter(book => book.author === author);
@@ -119,8 +119,18 @@ public_users.get('/async-get-author/:author', async function(req,res){
       return res.status(404).json({ message: "Books by this author not found" }); // Return error if books are not found for the author
     }
 });
-//TASK 13 Getting the book details based on Title
-
+//TASK 13 Getting the book details based on Title available in the shop
+public_users.get('/async-get-title/:title', function (req, res) {
+    const title = req.params.title;
+    setTimeout(() => {
+      const booksByTitle = Object.values(books).filter(book => book.title === title);
+      if (booksByTitle.length > 0) {
+        return res.status(200).json({ books: booksByTitle });
+      } else {
+        return res.status(404).json({ message: "Books by this title not found" });
+      }
+    }, 1000); // asynchronous operation
+  });
 
 
 
