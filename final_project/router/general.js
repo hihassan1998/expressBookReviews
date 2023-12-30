@@ -109,8 +109,17 @@ public_users.get('/async-get-isbn/:isbn', function (req, res) {
   });
  
 //TASK 12  Getting the book details based on Author
-public_users.get('/async-')
-//TASK 13
+public_users.get('/async-get-author/:author', async function(req,res){
+    const author = req.params.author; // Extract author from request parameters
+    const booksByAuthor = Object.values(books).filter(book => book.author === author);
+  
+    if (booksByAuthor.length > 0) {
+      return res.status(200).json({ books: booksByAuthor }); // Return books if found for the author
+    } else {
+      return res.status(404).json({ message: "Books by this author not found" }); // Return error if books are not found for the author
+    }
+});
+//TASK 13 Getting the book details based on Title
 
 
 
